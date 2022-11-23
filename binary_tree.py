@@ -2,10 +2,7 @@
     https://github.com/QunAlfadrian
     Kyun~#7250
 
-    Todo:
-    1. post order list
-    2. in order list
-    3. level list
+    All Done
 """
 # ==============================================================================
 class PohonBiner():
@@ -423,59 +420,107 @@ def make_list_pre_order(P:PohonBiner) -> list:
                         + make_list_pre_order(right(P)))
 
 def make_list_post_order(P:PohonBiner) -> list:
-    """Belom Dibikin
-
-    Belom Selesai
-    ----------
-    P : PohonBiner
-        _description_
-
-    Dikata Belom Anj
-    -------
-    list
-        _description_
-    """
-    pass
+    if is_tree_empty(P):
+        return []
+    else:
+        if is_one_elmt(P):
+            return [akar(P)]
+        else:
+            if is_biner(P):
+                return (make_list_post_order(left(P))
+                        + make_list_post_order(right(P))
+                        + [akar(P)])
+            elif is_uner_left(P):
+                return (make_list_post_order(left(P))
+                        + []
+                        + [akar(P)])
+            elif is_uner_right(P):
+                return ([]
+                        + make_list_post_order(right(P))
+                        + [akar(P)])
 
 def make_list_in_order(P:PohonBiner) -> list:
-    """Belom Dibikin Juga
-
-    Belom Pls
-    ----------
-    P : PohonBiner
-        _description_
-
-    Anying Dikata Belom
-    -------
-    list
-        _description_
-    """
-    pass
+    if is_tree_empty(P):
+        return []
+    else:
+        if is_one_elmt(P):
+            return [akar(P)]
+        else:
+            if is_biner(P):
+                return (make_list_in_order(left(P))
+                        + [akar(P)]
+                        + make_list_in_order(right(P)))
+            elif is_uner_left(P):
+                return (make_list_in_order(left(P))
+                        + akar(P)
+                        + [])
+            elif is_uner_right(P):
+                return ([]
+                        + akar(P)
+                        + make_list_in_order(P))
 
 def make_list_level(P:PohonBiner, N:int) -> list:
-    """Belom Selesai, Masi Bingung
+    """Create List of Nodes in the same level
 
-    Masi Bingung.
+    Parameters
     ----------
     P : PohonBiner
-        _description_
+        PohonBiner can be empty
     N : int
-        _description_
+        Level
 
-    Iya Belom.
+    Returns
     -------
     list
-        _description_
+        List of Nodes in level N
     """
     if is_tree_empty(P):
         return []
     else:
         if N == 0:
-            return [akar(P)]
+            if N == 0:
+                return [akar(P)]
+            else:
+                if is_biner(P):
+                    return [akar(left(P))] + [akar(right(P))]
+                elif is_uner_left(P):
+                    return [akar(left(P))]
+                elif is_uner_right(P):
+                    return [akar(right(P))]
         else:
             if is_biner(P):
-                pass
+                return (make_list_level(left(P), N-1)
+                        + make_list_level(right(P), N-1))
+            elif is_uner_left(P):
+                return make_list_level(left(P), N-1)
+            elif is_uner_right(P):
+                return make_list_level(right(P), N-1)
+        
+# ==============================================================================
+# Visualisasi
+def leftmost_leaf(P:PohonBiner):
+    if is_one_elmt(P):
+        return akar(P)
+    else:
+        if is_biner(P):
+            return leftmost_leaf(left(P))
+        elif is_uner_left(P):
+            return leftmost_leaf(left(P))
+        elif is_uner_right(P):
+            return leftmost_leaf(right(P))
 
+def rightmost_leaf(P:PohonBiner):
+    if is_one_elmt(P):
+        return akar(P)
+    else:
+        if is_biner(P):
+            return rightmost_leaf(right(P))
+        elif is_uner_left(P):
+            return rightmost_leaf(left(P))
+        elif is_uner_right(P):
+            return rightmost_leaf(right(P))
+# ==============================================================================
+# Main
 if __name__ == "__main__":
     PB = makePB(
         10,
@@ -526,16 +571,16 @@ if __name__ == "__main__":
     )
 
     PB5 = makePB(
-        10,
-        makePB(
-            5,
-            makePB(3, makePB(2), makePB(4)),
-            makePB(8, makePB(7), makePB(9)),
-        ),
+        25, 
         makePB(
             15,
-            makePB(13, makePB(12), makePB(14)),
-            makePB(18, makePB(17), makePB(20)),
+            makePB(10, makePB(4), makePB(12)),
+            makePB(22, makePB(18), makePB(24)),
+        ),
+        makePB(
+            50,
+            makePB(35, makePB(31), makePB(44)),
+            makePB(70, makePB(66), makePB(90)),
         ),
     )
 
@@ -552,7 +597,7 @@ if __name__ == "__main__":
             makePB(12, None, makePB(13)),
         ),
     )
-
+    
     """
         UNCOMMENT TO TEST
         if found error, pls lemme know :)
@@ -581,4 +626,7 @@ if __name__ == "__main__":
     # print(rep_prefix(del_leaf(PB5, 17)))
     # print(make_leaf_list(PB5))
     # print(rep_prefix(PB5))
-    # print(make_list_pre_order(PB5))
+    # print(make_list_pre_order(PB5))   
+    # print(make_list_in_order(PB5))
+    # print(make_list_post_order(PB5))
+    # print(make_list_level(PB5, 3))
