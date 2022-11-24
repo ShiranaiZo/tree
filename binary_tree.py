@@ -478,15 +478,7 @@ def make_list_level(P:PohonBiner, N:int) -> list:
         return []
     else:
         if N == 0:
-            if N == 0:
-                return [akar(P)]
-            else:
-                if is_biner(P):
-                    return [akar(left(P))] + [akar(right(P))]
-                elif is_uner_left(P):
-                    return [akar(left(P))]
-                elif is_uner_right(P):
-                    return [akar(right(P))]
+            return [akar(P)]
         else:
             if is_biner(P):
                 return (make_list_level(left(P), N-1)
